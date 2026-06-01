@@ -12,6 +12,17 @@ Upload any galaxy image → ResNet-18 classifies the morphology → RAG pipeline
 - **LLM**: Mistral via Ollama (local inference)
 - **Frontend**: Streamlit
 
+## Project Structure
+```
+galaxy-rag-assistant/
+├── models/              # Trained ResNet-18 weights
+├── src/
+│   ├── classifier.py    # Image classification module
+│   ├── rag.py           # RAG pipeline with FAISS vectorstore
+│   └── app.py           # Streamlit frontend
+└── requirements.txt
+```
+
 ## Galaxy Classes
 1. Disturbed Galaxy
 2. Merging Galaxy
@@ -54,15 +65,4 @@ Place `galaxy_classifier.pth` in the `models/` folder.
 ### 5. Run the app
 ```bash
 streamlit run src/app.py
-```
-
-## Project Structure
-```
-galaxy-rag-assistant/
-├── models/              # Trained ResNet-18 weights
-├── src/
-│   ├── classifier.py    # Image classification module
-│   ├── rag.py           # RAG pipeline with FAISS vectorstore
-│   └── app.py           # Streamlit frontend
-└── requirements.txt
 ```
