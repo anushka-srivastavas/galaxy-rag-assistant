@@ -48,7 +48,18 @@ Upload a galaxy image and receive:
 
 ## 📂 Project Structure
 
-text galaxy-rag-assistant/ ├── data/ ├── models/ │   └── galaxy_classifier.pth ├── src/ │   ├── app.py │   ├── classifier.py │   └── rag.py ├── requirements.txt └── README.md 
+```text
+galaxy-rag-assistant/
+├── data/
+├── models/
+│   └── galaxy_classifier.pth
+├── src/
+│   ├── app.py
+│   ├── classifier.py
+│   └── rag.py
+├── requirements.txt
+└── README.md
+```
 
 ---
 
