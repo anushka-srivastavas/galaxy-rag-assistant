@@ -1,7 +1,8 @@
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_ollama import OllamaLLM
+from langchain_groq import ChatGroq
+import os
 
 GALAXY_KNOWLEDGE = """
 Disturbed Galaxy:
@@ -36,28 +37,60 @@ These are spiral galaxies viewed edge-on with a prominent central bulge visible.
 """
 
 def build_vectorstore():
-    splitter = RecursiveCharacterTextSplitter(chunk_size=300, chunk_overlap=50)
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=300,
+        chunk_overlap=50
+    )
+
     chunks = splitter.create_documents([GALAXY_KNOWLEDGE])
-    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-    vectorstore = FAISS.from_documents(chunks, embeddings)
+
+    embeddings = HuggingFaceEmbeddings(
+        model_name="all-MiniLM-L6-v2"
+    )
+
+    vectorstore = FAISS.from_documents(
+        chunks,
+        embeddings
+    )
+
     return vectorstore
 
+
 def get_answer(galaxy_class: str, vectorstore):
-    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-    retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
-    llm = OllamaLLM(model="mistral")
-    
-    query = f"Tell me everything about {galaxy_class}. What are its characteristics, how does it form, and what are famous examples?"
+    retriever = vectorstore.as_retriever(
+        search_kwargs={"k": 3}
+    )
+
+    llm = ChatGroq(
+        model="llama-3.3-70b-versatile",
+        groq_api_key=os.environ.get("GROQ_API_KEY"),
+        temperature=0.3
+    )
+
+    query = (
+        f"Tell me everything about {galaxy_class}. "
+        f"What are its characteristics, how does it form, "
+        f"and what are famous examples?"
+    )
+
     docs = retriever.invoke(query)
-    context = "\n\n".join([doc.page_content for doc in docs])
-    
-    prompt = f"""Based on the following information about galaxies, answer the question.
+
+    context = "\n\n".join(
+        [doc.page_content for doc in docs]
+    )
+
+    prompt = f"""
+Based on the following information about galaxies, answer the question.
 
 Context:
 {context}
 
-Question: {query}
+Question:
+{query}
 
-Answer:"""
-    
-    return llm.invoke(prompt)
+Answer:
+"""
+
+    response = llm.invoke(prompt)
+
+    return response.content
