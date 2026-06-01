@@ -69,6 +69,7 @@ Try it here: https://artemisatlas.streamlit.app
 
 ## 🧠 System Architecture
 
+```text
 Galaxy Image
       ↓
 ResNet-18 Classifier
@@ -82,6 +83,7 @@ Astronomy Knowledge Context
 Groq Llama 3.3
       ↓
 Natural Language Explanation
+```
 
 ---
 
@@ -93,7 +95,9 @@ Natural Language Explanation
 - Successfully distinguishes major galaxy morphologies including spiral, elliptical, merging, and edge-on systems
 
 ---
+## 📂 Project Structure
 
+```text
 artemis-atlas/
 ├── data/
 ├── models/
@@ -104,6 +108,7 @@ artemis-atlas/
 │   └── rag.py
 ├── requirements.txt
 └── README.md
+```
 
 ---
 
