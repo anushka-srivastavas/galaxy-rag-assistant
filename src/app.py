@@ -36,10 +36,17 @@ if uploaded_file:
     st.image(image, caption="Uploaded Image", use_column_width=True)
 
     with st.spinner("Classifying galaxy..."):
-        galaxy_class, confidence = predict(image, model)
+        galaxy_class, confidence, top3 = predict(image, model)
 
     st.markdown(f"### 🔭 Predicted Class: `{galaxy_class}`")
     st.markdown(f"**Confidence:** {confidence}%")
+
+    if confidence < 50:
+        st.warning("⚠️ Low confidence — this galaxy may be outside the model's training distribution or is a rare morphology type.")
+
+    st.markdown("### 📊 Top 3 Predictions")
+    for name, prob in top3:
+        st.progress(int(prob), text=f"{name}: {prob}%")
 
     with st.spinner("Generating explanation from knowledge base..."):
         explanation = get_answer(galaxy_class, vectorstore)

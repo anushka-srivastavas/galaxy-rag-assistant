@@ -34,4 +34,11 @@ def predict(image: Image.Image, model):
         outputs = model(tensor)
         probabilities = torch.softmax(outputs, dim=1)
         confidence, predicted = torch.max(probabilities, 1)
-    return CLASS_NAMES[predicted.item()], round(confidence.item() * 100, 2)
+
+    top3_probs, top3_indices = torch.topk(probabilities, 3, dim=1)
+    top3 = [
+        (CLASS_NAMES[top3_indices[0][i].item()], round(top3_probs[0][i].item() * 100, 2))
+        for i in range(3)
+    ]
+
+    return CLASS_NAMES[predicted.item()], round(confidence.item() * 100, 2), top3
