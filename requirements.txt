@@ -1,0 +1,10 @@
+torch
+torchvision
+pillow
+langchain
+langchain-community
+faiss-cpu
+sentence-transformers
+streamlit
+ollama
+huggingface-hub
